@@ -1,12 +1,9 @@
-
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 import { api, HydrateClient } from "~/trpc/server";
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
-
-  void api.post.getLatest.prefetch();
+  const data = await api.post.getAll();
 
   return (
     <HydrateClient>
@@ -17,6 +14,7 @@ export default async function Home() {
         <SignedIn>
           <UserButton />
         </SignedIn>
+        <div>{data?.map((post) => <p key={post.id}>{post.content}</p>)}</div>
       </main>
     </HydrateClient>
   );
